@@ -344,3 +344,20 @@ main {
 .body img {
     width: 100%;
 }
+.logout{
+    background-color: #FF2548;
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    position: absolute;
+    right: 25px;
+    cursor: pointer;
+}
+#firebaseui-auth-container{
+    /* margin: 50%; */
+    margin-top: 30%;
+}
+#app {
+    display: "none";
+}
