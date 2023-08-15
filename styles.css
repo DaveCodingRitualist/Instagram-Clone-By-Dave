@@ -41,6 +41,7 @@
 
 }
 
+
 .search-bar-inner {
     background-color: #fafafa;
     border-radius: 3px;
@@ -345,6 +346,7 @@ main {
     width: 100%;
 }
 .logout{
+
     background-color: #FF2548;
     padding: 2px 5px;
     border-radius: 5px;
@@ -354,10 +356,54 @@ main {
     right: 25px;
     cursor: pointer;
 }
+.upload{
+
+    /* background-color: #FF2548; */
+    padding: 2px 5px;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    margin-left: 10px;
+    
+    cursor: pointer;
+}
 #firebaseui-auth-container{
     /* margin: 50%; */
-    margin-top: 30%;
+    margin-top: 10%;
 }
 #app {
-    display: "none";
+    /* display: "none"; */
+}
+.upload-container{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .7);
+    display: flex;
+    justify-content: center;
+     align-items: center;
+     z-index: 2;
+}
+.upload-content{ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    padding: 10px;
+    background-color: #262626;
+    width: 70%;
+    height: 70%;
+}
+
+form{
+    border-radius: 15px;
+    padding: 10px;
+}
+.close-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
 }
