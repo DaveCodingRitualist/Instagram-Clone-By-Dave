@@ -11,20 +11,32 @@ class App {
  // Initialize the FirebaseUI Widget using Firebase.
  this.posts = [];
  this.userId = "";
- this.pseudo = "";
+ this.pseudo = ""; 
  this.ui = new firebaseui.auth.AuthUI(auth);
   this.myAuth = document.querySelector('#firebaseui-auth-container');
   this.app = document.querySelector('#app');
   this.name = document.querySelector('.name');
   this.username = document.querySelector('.username');
   this.logout = document.querySelector('.logout');
-  this.myPost = document.querySelector(".posts")
-  // this.app.style.display = 'none';
+  this.myPost = document.querySelector(".posts");
+  this.closeOptions = document.querySelector(".close-options");
+  this.optionContainer = document.querySelector(".option-container");
+  this.options = document.querySelector(".my-options");
+  this.edit = document.querySelector(".edit");
+  this.delete = document.querySelector(".delete");
   this.handleAuth();
 this.logout.addEventListener('click', () => {
   this.handleLogout()
 });
 
+//close options
+this.optionContainer.addEventListener('click', (e) => {
+  if(e.target.classList.contains("close-options") || e.target.classList.contains("option-container")) {
+     this.optionContainer.classList.add("d-none")
+  } else {
+    this.optionContainer.classList.remove("d-none");
+  }
+});
 
 this.myForm = document.querySelector('.myForm');
 
@@ -125,11 +137,8 @@ if (!photo || !caption) {
 
   displayPosts(){
     console.log(this.posts);
-    this.myPost.innerHTML = this.posts
-    .map(
-      (post) =>
-        `
-        <div class="post">
+    const renderedPosts = this.posts.map((post) => `
+        <div class="post"  data-id="${post.id}">
         <div class="header">
           <div class="profile-area">
             <div class="post-pic">
@@ -272,10 +281,33 @@ if (!photo || !caption) {
           <a class="post-btn">Post</a>
         </div>
       </div>
-      `
-    )
-  }
+      `).join(""); // Join the array of post strings into a single string
+      this.myPost.innerHTML = renderedPosts;
+      const postsWrapper = this.myPost;
+   
+      //  Select the options div for each post
+     this.optionsDivs =  postsWrapper.querySelectorAll('.post .options');
+     this.optionsDivs.forEach((optionsDiv) => {
+    optionsDiv.addEventListener('click', () => {
+      // logic for handling the options div click
+      this.optionContainer.classList.remove("d-none");
+      const postElement = event.target.closest('.post');
+    
+    if (postElement) {
+      // Extract the post ID from the data-id attribute
+      const postId = postElement.getAttribute('data-id');
+      console.log('Clicked on options for post with ID:', postId);
+      this.posts.map((post) => {
+         if(post.id === postId){
+          this.edit.style.color = "red";
+          this.delete.style.color = "red";
+         }
+      });
+    }
+    });
+  });
 
+  }
 
   handleAuth(){
   auth.onAuthStateChanged((user) => {
@@ -344,9 +376,17 @@ class Upload{
     this.uploadButton = document.querySelector('.upload');
     this.contentContainer = document.querySelector('.content-container');
     this.closeContainer = document.querySelector('.close-button');
+    this.uploadContainer2 = document.querySelector('.upload-container2');
+    this.uploadContent2 = document.querySelector('.upload-content2');
+    this.editButton = document.querySelector('.upload2');
+    this.contentContainer2 = document.querySelector('.content-container2');
+    this.closeContainer2 = document.querySelector('.close-button2');
     this.myAuth = document.querySelector('#firebaseui-auth-container');
      this.mainContainer = document.querySelector('.main-container');
     
+    this.closeContainer.addEventListener('click', () => {
+      this.uploadContainer.classList.add('d-none');
+    });
     this.closeContainer.addEventListener('click', () => {
       this.uploadContainer.classList.add('d-none');
     });
@@ -365,12 +405,8 @@ class Upload{
     });
   }
 
-  // redirectToApp(){
-  //   this.uploadContainer.classList.add('d-none');
-    
-    
-  // }
+
 }
+new App();
 new Upload();
 
- new App();

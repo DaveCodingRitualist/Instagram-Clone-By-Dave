@@ -364,17 +364,52 @@ main {
     color: white;
     border: none;
     margin-left: 10px;
-    
     cursor: pointer;
 }
 #firebaseui-auth-container{
-    /* margin: 50%; */
     margin-top: 10%;
 }
-#app {
-    /* display: "none"; */
+
+.upload-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    justify-content: center;
+     align-items: center;
+
 }
-.upload-container{
+.upload-content{ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    padding: 10px;
+    max-width: 400px;
+    
+}
+
+.myForm{
+    border-radius: 15px;
+    padding: 10px;
+    height: 350px;
+    background-color: #454444;
+}
+.close-button {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+.my-options{
+    width: 400px;
+    border-radius: 15px;
+    font-weight: 600;
+}
+.option-container{
     position: absolute;
     width: 100vw;
     height: 100vh;
@@ -384,26 +419,25 @@ main {
      align-items: center;
      z-index: 2;
 }
-.upload-content{ 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    padding: 10px;
-    background-color: #262626;
-    width: 70%;
-    height: 70%;
+.option{
+    padding-top: 13px;
+    padding-bottom: 13px;
+    border-bottom: 1px solid grey;
 }
-
-form{
-    border-radius: 15px;
-    padding: 10px;
-}
-.close-button {
+.close-options {
     position: absolute;
     top: 5px;
     right: 10px;
     color: white;
     font-size: 1.5em;
     cursor: pointer;
+}
+.upload-content input, .upload-content input:focus{
+    background-color: #989898;
+    outline: none;
+    border: none;
+    color: #262626;
+}
+.cancel-option{
+    border-bottom: none;
 }

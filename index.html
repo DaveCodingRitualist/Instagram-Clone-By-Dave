@@ -22,6 +22,20 @@
   <body>
     <div id="firebaseui-auth-container"></div>
     <div id="app">
+      <div class="option-container d-none">
+        <div class="close-options">X</div>
+        <div class="my-options border-radius bg-light text-center">
+        <div class="option edit">Edit</div>
+        <div class="option delete">Delete</div>
+        <div class="option ">Report</div>
+        <div class="option ">Unfollow</div>
+        <div class="option ">Go to post</div>
+        <div class="option ">Share to...</div>
+        <div class="option ">Copy link</div>
+        <div class="option ">Embed</div>
+        <div class="option cancel-option">Cancel</div>
+        </div> 
+      </div>
       <div class="upload-container d-none">
         <div class="close-button">X</div>
          <div class="upload-content border-raduis">
@@ -35,12 +49,31 @@
               <input type="text" placeholder="Enter your caption" name="caption" class="form-control" id="exampleInputPassword1">
             </div>
       
-            <button type="submit" id="upload-button form-control" class="btn btn-primary">Upload</button>
+            <button type="submit" id="upload-button form-control" class="btn btn-info">Upload</button>
          <div class="updateMssg">      
          </div>
           </form>    
           </div>        
       </div>
+      <!-- <div class="upload-container2 d-none">
+        <div class="close-button2">X</div>
+         <div class="upload-content2 border-raduis">
+          <form class="border-light border p-5 border-radius myForm" >
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label text-light">Upload your media here</label>
+              <input type="file" class="form-control" name="photo" id="exampleInputEmail1" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label text-light">Caption</label>
+              <input type="text" placeholder="Enter your caption" name="caption" class="form-control" id="exampleInputPassword1">
+            </div>
+      
+            <button type="submit" id="upload-button2 form-control" class="btn btn-info update-button">Update</button>
+         <div class="updateMssg">      
+         </div>
+          </form>    
+          </div>        
+      </div> -->
         <div class="main-container">
       <div class="navbar">
         <div class="navbar-inner">
@@ -267,7 +300,6 @@
               </div>
             </div>
             <div class="posts">
-              <img src="https://firebasestorage.googleapis.com/v0/b/instagram-clone-b1788.appspot.com/o/images%2Fundefined?alt=media&token=db7d0e80-5e31-4d6e-8ef8-254c322a0216" alt="">
               <!-- <div class="post">
                 <div class="header">
                   <div class="profile-area">
@@ -534,8 +566,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-storage.js"></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase/database.js"></script> -->
     <script>
-    
+
         // Your web app's Firebase configuration
         const firebaseConfig = {
           apiKey: "AIzaSyAhUBDz4GBDPlLmiitn_cBXqvqCwLQtqM8",
