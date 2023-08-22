@@ -370,7 +370,7 @@ main {
     margin-top: 10%;
 }
 
-.upload-container {
+.upload-container, .upload-container2  {
     position: absolute;
     width: 100vw;
     height: 100vh;
@@ -380,7 +380,7 @@ main {
      align-items: center;
 
 }
-.upload-content{ 
+.upload-content, .upload-content2{ 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -390,13 +390,13 @@ main {
     
 }
 
-.myForm{
+.myForm, .myForm2{
     border-radius: 15px;
     padding: 10px;
     height: 350px;
     background-color: #454444;
 }
-.close-button {
+.close-button, .close-button2 {
     position: absolute;
     top: 5px;
     right: 10px;
@@ -440,4 +440,7 @@ main {
 }
 .cancel-option{
     border-bottom: none;
+}
+.edit, .delete{
+    cursor: pointer;
 }

@@ -12,6 +12,7 @@ class App {
  this.posts = [];
  this.userId = "";
  this.pseudo = ""; 
+ this.postId = "";
  this.ui = new firebaseui.auth.AuthUI(auth);
   this.myAuth = document.querySelector('#firebaseui-auth-container');
   this.app = document.querySelector('#app');
@@ -24,6 +25,98 @@ class App {
   this.options = document.querySelector(".my-options");
   this.edit = document.querySelector(".edit");
   this.delete = document.querySelector(".delete");
+
+  this.uploadContainer = document.querySelector('.upload-container');
+    this.uploadContent = document.querySelector('.upload-content');
+    this.uploadButton = document.querySelector('.upload');
+    this.contentContainer = document.querySelector('.content-container');
+    this.closeContainer = document.querySelector('.close-button');
+    this.uploadContainer2 = document.querySelector('.upload-container2');
+    this.uploadContent2 = document.querySelector('.upload-content2');
+    this.editButton = document.querySelector('.upload2');
+    console.log(this.uploadContainer );
+    this.contentContainer2 = document.querySelector('.content-container2');
+    this.closeContainer2 = document.querySelector('.close-button2');
+    this.myAuth = document.querySelector('#firebaseui-auth-container');
+     this.mainContainer = document.querySelector('.main-container');
+     this.updateMsg = document.querySelector(".update-msg");
+    this.closeContainer.addEventListener('click', () => {
+      this.uploadContainer.classList.add('d-none');
+    });
+    this.closeContainer2.addEventListener('click', () => {
+      this.uploadContainer2.classList.add('d-none');
+    });
+   this.uploadContainer.addEventListener('click', e => {
+    if(!e.target.classList.contains('upload-content') && !e.target.classList.contains('myForm') && !e.target.classList.contains('form-control') && !e.target.classList.contains('uploading') && !e.target.classList.contains('btn')){
+          this.uploadContainer.classList.add('d-none');
+          this.mainContainer.style.display = "block";
+          // Refresh the page after a specific amount of time (e.g., 5000 milliseconds or 5 seconds)
+ 
+        
+
+    } 
+   });
+
+   
+   this.uploadContainer2.addEventListener('click', e => {
+    if(!e.target.classList.contains('upload-content2') && !e.target.classList.contains('myForm2') && !e.target.classList.contains('form-control') && !e.target.classList.contains('uploading') && !e.target.classList.contains('btn')){
+          this.uploadContainer2.classList.add('d-none');
+          this.mainContainer.style.display = "block";
+          location.reload();
+    } 
+   });
+    
+    this.uploadButton.addEventListener('click', e => {
+      this.uploadContainer.classList.remove('d-none');
+      this.mainContainer.style.display = "none";
+
+    });
+
+    // Edit click event
+    this.edit.addEventListener('click', e => {
+      this.uploadContainer2.classList.remove('d-none');
+      this.mainContainer.style.display = "none";
+      this.optionContainer.style.display = "none";
+      const postElement = e.target.closest('.post');
+      console.log(postElement);
+      this.myForm2 = document.querySelector('.myForm2');
+      // Extract the post ID from the data-id attribute
+      const postId = localStorage.getItem('postId');
+      
+         var docRef = db.collection("users").doc(this.userId);
+
+         docRef
+           .get()
+           .then((doc) => {
+             if (doc.exists) {
+               console.log("Document data:", doc.data().posts);
+               this.posts = doc.data().posts;
+               this.posts.map((post) => {
+                if(post.id === postId){
+                 this.myForm2.caption.value = post.caption;
+                }
+               });
+             } else {
+               // doc.data() will be undefined in this case
+               console.log("No such document!");
+               db.collection("users")
+                 .doc(this.userId)
+                 .set({
+                   posts: [],
+                 })
+                 .then(() => {
+                   console.log("User successfully created!");
+                 })
+                 .catch((error) => {
+                   console.error("Error writing document: ", error);
+                 });
+             }
+           })
+           .catch((error) => {
+             console.log("Error getting document:", error);
+           });
+    });
+ 
   this.handleAuth();
 this.logout.addEventListener('click', () => {
   this.handleLogout()
@@ -34,11 +127,71 @@ this.optionContainer.addEventListener('click', (e) => {
   if(e.target.classList.contains("close-options") || e.target.classList.contains("option-container")) {
      this.optionContainer.classList.add("d-none")
   } else {
-    this.optionContainer.classList.remove("d-none");
+    this.optionContainer.classList.remove ("d-none");
   }
 });
 
+// Update post
+
+console.log(this.updateMsg)
+this.myForm2 = document.querySelector('.myForm2');
+this.myForm2.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const postId = localStorage.getItem('postId'); // Get the postId from local storage
+  const updatedCaption = this.myForm2.caption.value; // Get updated caption from your form
+  const updatedPhoto = this.myForm2.photo.files[0]; // Get updated photo from your form
+
+  // Find the post in your posts array by matching the postId
+  const postToUpdate = this.posts.find(post => post.id === postId);
+
+  if (postToUpdate) {
+      // Update the caption for the post
+      postToUpdate.caption = updatedCaption;
+
+      // Upload the updated photo to Firebase Storage and get the download URL
+      if (updatedPhoto) {
+          var storageRef = firebase.storage().ref();
+          var imageRef = storageRef.child("images/" + updatedPhoto.name);
+
+          // Upload the file to Firebase Storage
+          imageRef.put(updatedPhoto)
+              .then(function(snapshot) {
+                  // Get the download URL of the uploaded image
+                  return snapshot.ref.getDownloadURL();
+              })
+              .then((downloadURL) => {
+                  // Update the downloadURL in the post object
+                  postToUpdate.downloadURL = downloadURL;
+
+                  // Update the post in Firestore
+                  this.savePost();
+
+              })
+              .catch(function(error) {
+                  console.error("Error uploading image: ", error);
+              });
+      } else {
+          // No updated photo, only update caption
+          this.savePost();
+
+      }
+  }
+   
+     this.updateMsg.innerHTML = `<h6 style="color: chartreuse;" class="my-2">Your post has been updated successfully</h6>` 
+     setTimeout(() =>  this.updateMsg.innerText = '', 3000);
+   this.myForm.reset();
+   setTimeout(() =>  {
+    this.uploadContainer2.classList.add('d-none');
+    this.mainContainer.style.display = 'block';
+    location.reload();
+   } , 3000);
+   
+ }); 
+
+
+
 this.myForm = document.querySelector('.myForm');
+
 
 // Add an event listener to the form submission
 this.myForm.addEventListener('submit', (e) => {
@@ -79,6 +232,7 @@ if (!photo || !caption) {
 });
   }
 
+  
   addPost({ downloadURL, caption }) {
     if (downloadURL != "") {
       const newPost = { id: cuid(), downloadURL, caption};
@@ -103,6 +257,9 @@ if (!photo || !caption) {
         console.log("Error writting Document", Error)
       }); 
   }
+
+ 
+
 
   fetchPostsFromDB() {
     var docRef = db.collection("users").doc(this.userId);
@@ -292,11 +449,11 @@ if (!photo || !caption) {
       // logic for handling the options div click
       this.optionContainer.classList.remove("d-none");
       const postElement = event.target.closest('.post');
-    
     if (postElement) {
       // Extract the post ID from the data-id attribute
       const postId = postElement.getAttribute('data-id');
-      console.log('Clicked on options for post with ID:', postId);
+      // Set a value in local storage
+      localStorage.setItem('postId', postId);
       this.posts.map((post) => {
          if(post.id === postId){
           this.edit.style.color = "red";
@@ -366,47 +523,7 @@ handleLogout() {
     });
 }
 
-
 }
-
-class Upload{
-  constructor(){
-    this.uploadContainer = document.querySelector('.upload-container');
-    this.uploadContent = document.querySelector('.upload-content');
-    this.uploadButton = document.querySelector('.upload');
-    this.contentContainer = document.querySelector('.content-container');
-    this.closeContainer = document.querySelector('.close-button');
-    this.uploadContainer2 = document.querySelector('.upload-container2');
-    this.uploadContent2 = document.querySelector('.upload-content2');
-    this.editButton = document.querySelector('.upload2');
-    this.contentContainer2 = document.querySelector('.content-container2');
-    this.closeContainer2 = document.querySelector('.close-button2');
-    this.myAuth = document.querySelector('#firebaseui-auth-container');
-     this.mainContainer = document.querySelector('.main-container');
-    
-    this.closeContainer.addEventListener('click', () => {
-      this.uploadContainer.classList.add('d-none');
-    });
-    this.closeContainer.addEventListener('click', () => {
-      this.uploadContainer.classList.add('d-none');
-    });
-   this.uploadContainer.addEventListener('click', e => {
-    if(!e.target.classList.contains('upload-content') && !e.target.classList.contains('myForm') && !e.target.classList.contains('form-control') && !e.target.classList.contains('uploading') && !e.target.classList.contains('btn')){
-          this.uploadContainer.classList.add('d-none');
-          this.mainContainer.style.display = "block";
-    } 
-   });
-
-    this.uploadButton.addEventListener('click', e => {
-      this.uploadContainer.classList.toggle('d-none');
-      this.mainContainer.style.display = "none";
-     
-      // }
-    });
-  }
-
-
-}
+  
 new App();
-new Upload();
 
