@@ -13,6 +13,7 @@ class App {
  this.userId = "";
  this.pseudo = ""; 
  this.postId = "";
+ this.userName = ""
  this.ui = new firebaseui.auth.AuthUI(auth);
   this.myAuth = document.querySelector('#firebaseui-auth-container');
   this.app = document.querySelector('#app');
@@ -25,7 +26,6 @@ class App {
   this.options = document.querySelector(".my-options");
   this.edit = document.querySelector(".edit");
   this.delete = document.querySelector(".delete");
-
   this.uploadContainer = document.querySelector('.upload-container');
     this.uploadContent = document.querySelector('.upload-content');
     this.uploadButton = document.querySelector('.upload');
@@ -69,7 +69,6 @@ class App {
     this.uploadButton.addEventListener('click', e => {
       this.uploadContainer.classList.remove('d-none');
       this.mainContainer.style.display = "none";
-
     });
 
     // Edit click event
@@ -220,81 +219,108 @@ if (!photo || !caption) {
       // Save the image URL and caption to Firestore
       const db = firebase.firestore();
     //  Add data to Firestore collection
-      this.addPost({downloadURL, caption });
+      this.addPost({downloadURL, caption});
     })
     .catch(function(error) {
       console.error("Error uploading image: ", error);
     });
-  
+ 
+ 
     this.updateMssg.innerHTML = `<h6 style="color: chartreuse;" class="my-2">Your images has been uploaded successfully</h6>` 
     setTimeout(() =>  this.updateMssg.innerText = '', 3000);
   this.myForm.reset();
+  location.reload();
 });
   }
 
   
   addPost({ downloadURL, caption }) {
     if (downloadURL != "") {
-      const newPost = { id: cuid(), downloadURL, caption};
+      const newPost = { id: cuid(), downloadURL, caption, postOwnerId: this.userId, userName: this.userName};
       this.posts = [...this.posts, newPost];
       this.savePost();
       this. displayPosts();
-    
+     
     }
   }
 
   savePost() {
-    console.log("This post is for this user id", this.userId);
-    db.collection("users").doc(this.userId).set({
-      posts: this.posts
-   
-     
-  })
-      .then(() => {
-        console.log("Document successfuly written");
+    db.collection("users")
+      .doc(this.userId)
+      .set({
+        posts: this.posts,
       })
-      .catch((Error) => {
-        console.log("Error writting Document", Error)
-      }); 
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
   }
 
  
 
 
   fetchPostsFromDB() {
-    var docRef = db.collection("users").doc(this.userId);
+    // var docRef = db.collection("users").doc(this.userId);
+    // docRef
+    //   .get()
+    //   .then((doc) => {
+    //     if (doc.exists) {
+    //       console.log("Document data:", doc.data().posts);
+    //       this.posts = doc.data().posts;
+    //       this.displayPosts();
+    //     } else {
+    //       // doc.data() will be undefined in this case
+    //       console.log("No such document!");
+    //       db.collection("users")
+    //         .doc(this.userId)
+    //         .set({
+    //           posts: [],
+    //         })
+    //         .then(() => {
+    //           console.log("User successfully created!");
+    //         })
+    //         .catch((error) => {
+    //           console.error("Error writing document: ", error);
+    //         });
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error getting document:", error);
+    //   });
 
-    docRef
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          console.log("Document data:", doc.data().posts);
-          this.posts = doc.data().posts;
-          this.displayPosts();
-        } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-          db.collection("users")
-            .doc(this.userId)
-            .set({
-              posts: [],
-            })
-            .then(() => {
-              console.log("User successfully created!");
-            })
-            .catch((error) => {
-              console.error("Error writing document: ", error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting document:", error);
+
+    db.collection("users")
+    .get()
+    .then((querySnapshot) => {
+      const allPosts = [];
+
+      querySnapshot.forEach((doc) => {
+        const userData = doc.data();
+        const userPosts = userData.posts || [];
+
+        allPosts.push(...userPosts);
       });
+
+      // Now you have an array of all posts from all users
+      this.posts = allPosts;
+      console.log('All post:', this.posts)
+      this.displayPosts();
+    })
+    .catch((error) => {
+      console.log("Error getting documents: ", error);
+    });
   }
 
-  displayPosts(){
-    console.log(this.posts);
-    const renderedPosts = this.posts.map((post) => `
+    
+    displayPosts() {
+      const renderedPosts = this.posts.map((post) => {
+        // Check if the post belongs to the currently logged-in user
+      
+        
+        // Render the post HTML based on whether it belongs to the current user or not
+        return `
         <div class="post"  data-id="${post.id}">
         <div class="header">
           <div class="profile-area">
@@ -307,7 +333,7 @@ if (!photo || !caption) {
                 src="assets/akhil.png"
               />
             </div>
-            <span class="profile-name">${this.pseudo}</span>
+            <span class="profile-name">${post.userName}</span>
           </div>
           <div class="options">
             <div
@@ -425,7 +451,7 @@ if (!photo || !caption) {
           </div>
          
           <span class="caption">
-            <span class="caption-username"><b>${this.pseudo}</b></span>
+            <span class="caption-username"><b>${post.userName}</b></span>
             <span class="caption-text">
               ${post.caption}
               </span
@@ -438,7 +464,8 @@ if (!photo || !caption) {
           <a class="post-btn">Post</a>
         </div>
       </div>
-      `).join(""); // Join the array of post strings into a single string
+      `;
+    }).join(""); // Join the array of post strings into a single string
       this.myPost.innerHTML = renderedPosts;
       const postsWrapper = this.myPost;
    
@@ -454,16 +481,103 @@ if (!photo || !caption) {
       const postId = postElement.getAttribute('data-id');
       // Set a value in local storage
       localStorage.setItem('postId', postId);
-      this.posts.map((post) => {
-         if(post.id === postId){
-          this.edit.style.color = "red";
-          this.delete.style.color = "red";
-         }
-      });
+      // const matchingPost = this.posts.find(post => post.id === postId);
+     
+      var docRef = db.collection("users").doc(this.userId);
+     console.log(this.userId);
+      docRef
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            console.log("Current User Posts:", doc.data().posts);
+            this.posts = doc.data().posts;
+            console.log(this.posts)
+            this.posts.map((post) => {
+
+              const matchingPost = this.posts.find(post => post.id === postId);
+              
+                  if(matchingPost){
+                    this.edit.classList.remove("d-none");
+                    this.delete.classList.remove("d-none");
+                    this.edit.classList.add("myPost");
+                    this.delete.classList.add("myPost");
+                    console.log('this post belong to this user')
+                  } else {
+                    this.edit.classList.add("d-none")
+                    this.delete.classList.add("d-none")
+                    console.log(`this post doesn't belong to this user`)
+                  }
+            });
+          
+            
+             
+
+          } 
+        })
+        .catch((error) => {
+          console.log("Error getting document:", error);
+        });
+       
     }
     });
   });
 
+   
+    // Delete post
+    this.delete.addEventListener('click', e => {
+      const postElement = e.target.closest('.post');
+      // Extract the post ID from the data-id attribute
+      const postId = localStorage.getItem('postId');
+      console.log(postId);
+         var docRef = db.collection("users").doc(this.userId);
+           
+         docRef
+           .get()
+           .then((doc) => {
+             if (doc.exists) {
+              
+   // Find the post in your posts array by matching the postId
+   const postToDeleteIndex = this.posts.findIndex(post => post.id === postId);
+
+   if (postToDeleteIndex !== -1) {
+       // Remove the post from the array
+       this.posts.splice(postToDeleteIndex, 1);
+
+       // Delete the post from Firestore
+       this.savePost();
+     // close option container
+     this.optionContainer.style.display = "none";
+       // Refresh the posts display
+       this.displayPosts();
+         // refresh the page
+         setTimeout(() =>  {
+
+          location.reload();
+         } , 3000);
+      
+   }
+
+             } else {
+               // doc.data() will be undefined in this case
+               console.log("No such document!");
+               db.collection("users")
+                 .doc(this.userId)
+                 .set({
+                   posts: this.posts,
+                 })
+                 .then(() => {
+                   console.log("User successfully created!");
+                 })
+                 .catch((error) => {
+                   console.error("Error writing document: ", error);
+                 });
+             }
+           })
+           .catch((error) => {
+             console.log("Error getting document:", error);
+           });
+         
+    });
   }
 
   handleAuth(){
@@ -472,6 +586,7 @@ if (!photo || !caption) {
        this.userId = user.uid;
       this.name.innerHTML = user.displayName;
       this.pseudo = user.displayName.replace(/\s+/g, '');
+      this.userName =  this.pseudo;
        this.username.innerHTML = this.pseudo;
       this.redirectToApp();
     
@@ -500,6 +615,7 @@ redirectToAuth() {
         // or whether we leave that to developer to handle.
         this.userId = authResult.user.uid;
         this.$authUserText.innerHTML = user.displayName;
+
         this.redirectToApp();
       },
     },
@@ -521,6 +637,7 @@ handleLogout() {
     .catch((error) => {
       console.log("ERROR OCCURED", error);
     });
+    localStorage.clear();
 }
 
 }
