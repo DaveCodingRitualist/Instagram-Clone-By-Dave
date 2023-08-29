@@ -13,7 +13,8 @@ class App {
  this.userId = "";
  this.pseudo = ""; 
  this.postId = "";
- this.userName = ""
+ this.userName = "",
+ this.currentUserArrayLength = "",
  this.ui = new firebaseui.auth.AuthUI(auth);
   this.myAuth = document.querySelector('#firebaseui-auth-container');
   this.app = document.querySelector('#app');
@@ -229,7 +230,6 @@ if (!photo || !caption) {
     this.updateMssg.innerHTML = `<h6 style="color: chartreuse;" class="my-2">Your images has been uploaded successfully</h6>` 
     setTimeout(() =>  this.updateMssg.innerText = '', 3000);
   this.myForm.reset();
-  location.reload();
 });
   }
 
@@ -240,7 +240,7 @@ if (!photo || !caption) {
       this.posts = [...this.posts, newPost];
       this.savePost();
       this. displayPosts();
-     
+
     }
   }
 
@@ -303,7 +303,7 @@ if (!photo || !caption) {
         allPosts.push(...userPosts);
       });
 
-      // Now you have an array of all posts from all users
+      // Array of all posts from all users
       this.posts = allPosts;
       console.log('All post:', this.posts)
       this.displayPosts();
@@ -317,8 +317,7 @@ if (!photo || !caption) {
     displayPosts() {
       const renderedPosts = this.posts.map((post) => {
         // Check if the post belongs to the currently logged-in user
-      
-        
+   
         // Render the post HTML based on whether it belongs to the current user or not
         return `
         <div class="post"  data-id="${post.id}">
@@ -491,23 +490,33 @@ if (!photo || !caption) {
           if (doc.exists) {
             console.log("Current User Posts:", doc.data().posts);
             this.posts = doc.data().posts;
-            console.log(this.posts)
+            // Store the value of currentUserArrayLength in a separate variable
+             const currentUserArrayLength = doc.data().posts.length;
+            console.log( 'the current array', currentUserArrayLength );
+           if(currentUserArrayLength === 0){
+            this.edit.classList.add("d-none")
+            this.delete.classList.add("d-none")
+            console.log(`this post doesn't belong to this user`)
+           } else{
             this.posts.map((post) => {
-
               const matchingPost = this.posts.find(post => post.id === postId);
-              
+                   // Now you can use currentUserArrayLength here
                   if(matchingPost){
                     this.edit.classList.remove("d-none");
                     this.delete.classList.remove("d-none");
                     this.edit.classList.add("myPost");
                     this.delete.classList.add("myPost");
+                   
                     console.log('this post belong to this user')
-                  } else {
+                  }
+                  else {
                     this.edit.classList.add("d-none")
                     this.delete.classList.add("d-none")
                     console.log(`this post doesn't belong to this user`)
                   }
             });
+           }
+           
           
             
              

@@ -9,6 +9,9 @@
     .navbar-inner {
         width: 100%;
     }
+    .navbar-mobile {
+        display: none;
+    } 
 }
 
 @media (max-width: 640px) {
@@ -28,4 +31,50 @@
         border: none;
         background: transparent;
     }
-}
+} 
+    @media (max-width: 1200px) {
+       
+        .sidebar{
+            display: none;
+        }
+        .content{
+            width: 100vw;
+            margin-right: 0;
+        }
+        .mobile-devices{
+            display: flex;
+        }
+        .my-options{
+            width: 300px;
+            background-color: #262626;
+        }
+        .navbar-mobile {
+            display: flex;
+        } 
+      
+      /* @media (min-width: 0px) and (max-width: 413px) {
+        /* Styles for devices between 600px and 1023px */
+        /* .sidebar {
+            display: none;
+        }
+        .mobile-devices{
+            display: flex;
+        } 
+      }
+
+      @media only screen and (max-width: 1200px){
+        /*Tablets [601px -> 1200px]*/
+    }
+    @media only screen and (max-width: 600px){
+        /*Big smartphones [426px -> 600px]*/
+    }
+    @media only screen and (max-width: 425px){
+        /*Small smartphones [325px -> 425px]*/
+        .content{
+            width: 100vw;
+            margin-right: 0;
+        }
+        .sidebar{
+            display: none;
+        }
+    }
