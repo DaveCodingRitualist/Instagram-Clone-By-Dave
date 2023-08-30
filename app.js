@@ -14,6 +14,8 @@ class App {
  this.pseudo = ""; 
  this.postId = "";
  this.userName = "",
+ this.create = document.querySelector(".create");
+ console.log(this.create);
  this.currentUserArrayLength = "",
  this.ui = new firebaseui.auth.AuthUI(auth);
   this.myAuth = document.querySelector('#firebaseui-auth-container');
@@ -59,6 +61,7 @@ class App {
    });
 
    
+   
    this.uploadContainer2.addEventListener('click', e => {
     if(!e.target.classList.contains('upload-content2') && !e.target.classList.contains('myForm2') && !e.target.classList.contains('form-control') && !e.target.classList.contains('uploading') && !e.target.classList.contains('btn')){
           this.uploadContainer2.classList.add('d-none');
@@ -70,6 +73,11 @@ class App {
     this.uploadButton.addEventListener('click', e => {
       this.uploadContainer.classList.remove('d-none');
       this.mainContainer.style.display = "none";
+    });
+    this.create.addEventListener('click', e => {
+      this.uploadContainer.classList.remove('d-none');
+      this.mainContainer.style.display = "none";
+      this.logout.style.display = "none";
     });
 
     // Edit click event
@@ -119,6 +127,7 @@ class App {
  
   this.handleAuth();
 this.logout.addEventListener('click', () => {
+  this.logout.style.display = "none";
   this.handleLogout()
 });
 
@@ -227,11 +236,12 @@ if (!photo || !caption) {
     });
  
  
-    this.updateMssg.innerHTML = `<h6 style="color: chartreuse;" class="my-2">Your images has been uploaded successfully</h6>` 
+    this.updateMssg.innerHTML = `<h6 style="color: chartreuse;" class="my-2">Your post has been uploaded successfully</h6>` 
     setTimeout(() =>  this.updateMssg.innerText = '', 3000);
   this.myForm.reset();
 });
   }
+
 
   
   addPost({ downloadURL, caption }) {
@@ -598,7 +608,6 @@ if (!photo || !caption) {
       this.userName =  this.pseudo;
        this.username.innerHTML = this.pseudo;
       this.redirectToApp();
-    
     } else {
       this.redirectToAuth();
     };  
@@ -609,6 +618,7 @@ if (!photo || !caption) {
 redirectToApp() {
   this.myAuth.style.display = "none";
   this.app.style.display = "block";
+  this.logout.style.display = "flex";
   this.fetchPostsFromDB();
 
 }
@@ -624,7 +634,7 @@ redirectToAuth() {
         // or whether we leave that to developer to handle.
         this.userId = authResult.user.uid;
         this.$authUserText.innerHTML = user.displayName;
-
+        
         this.redirectToApp();
       },
     },

@@ -101,6 +101,8 @@ main {
     background-color: #fafafa;
     display: flex;
     justify-content: center;
+    width: 100vw;
+    position: relative;
 }
 
 .content-container {
@@ -350,25 +352,26 @@ main {
 }
 .logout{
 
-    background-color: #FF2548;
+    /* background-color: #FF2548;
     padding: 2px 5px;
     border-radius: 5px;
     color: white;
     border: none;
     position: absolute;
-    right: 25px;
+    right: 25px; */
     cursor: pointer;
 }
-.upload{
+/* .upload{
 
     /* background-color: #FF2548; */
-    padding: 2px 5px;
+    /* padding: 2px 5px;
     border-radius: 5px;
     color: white;
     border: none;
     margin-left: 10px;
-    cursor: pointer;
-}
+    cursor: pointer; */
+} */
+
 #firebaseui-auth-container{
     margin-top: 10%;
 }
@@ -451,22 +454,14 @@ main {
 }
 
 .mobile-devices{
-
     display: none;
     width: 100vw;
     height: 50px;
     position: fixed;
     bottom: 0px;
-    background-color: black;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between; 
-    
+    background-color: black;  
 }
-.logo-mobile{
-    /*
-     z-index: -1; */
-}
+
 .navbar-inner-mobile{
     display: flex;
     flex-direction: row;
@@ -479,24 +474,110 @@ main {
     border-bottom: 1px solid var(--color-border);
    
 }
+.big-devices{
+    width: 100%;
+    
+}
+.mob-options2 {
+    border-radius: 5px;
+    width: 200px;
+    height: 40px;
+    padding-left: 5px;
 
-/* @media (max-width: 480px) {
-    /* Your mobile-specific styles here */
-    /* .sidebar{
+}
+
+.mob-options2:hover {
+   background-color: var(--color-border);
+
+}
+.big-devices{
+    display: flex;
+    flex-direction: column;
+   
+}
+.side-nav{
+    /* position: fixed; */
+    height: 100vh;
+    width: 250px;
+    border-right: 1px solid var(--color-border);
+    position: absolute;
+    left: 0;
+    /* overflow-y: hidden; */
+    margin-top: -30px;
+    margin-bottom: -30px;
+    display: flex;
+    flex-direction: column;
+    
+
+}
+.more{
+    display: flex;
+ position: fixed;
+  bottom: 15px;
+  left: 0px;
+  z-index: 4;
+  margin-top: 20px;
+ border-radius: 5px;
+  width: 200px;
+  height: 40px;
+  padding-left: 5px;
+}
+.more:hover{
+  background-color: var(--color-border);
+}
+.mob-options2 {
+    display: flex;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding: 5px;
+    cursor: pointer;
+}
+.option-title{
+    font-weight: 500;
+}
+   @media (max-width: 1024px) {  
+    .sidebar {
         display: none;
     }
-    .content{
-        width: 100vw;
-        margin-right: 0;
-    }
-    .mobile-devices{
+    .mobile-devices {
         display: flex;
+        flex-direction: row;
+        justify-content: space-between; 
+      }
+   
+    .content-container {
+        display: flex;
+        justify-content: center;
+        
     }
-    .my-options{
-        width: 300px;
-        background-color: #262626;
+    .content{
+        margin: auto;
+    }
+    .navbar-inner {
+        width: 100%;
     }
     .navbar-mobile {
-        display: flex; */
+        display: flex;
+    } 
+    .upload{
+
+        /* background-color: #FF2548; */
+        padding: 0;
+        border-radius: none;
+        color: white;
+        border: none;
+        margin-left: 0;
+
     }
-  } */
+    .side-nav{
+        display: none;
+    }
+} 
+
+@media (min-width: 769px) and (max-width: 1024px){
+    .option-title{
+        display: none;
+    }
+}
