@@ -26,7 +26,7 @@ body{
 }
 
 .navbar-inner {
-    width: 975px;
+    width: 100%;
     height: 100%;
     display: flex;
     padding: 0px 20px; 
@@ -73,7 +73,7 @@ body{
 }
 
 .navbar-icons {
-    width: 360px;
+    width: 10px;
     height: 22px;
 }
 
@@ -277,10 +277,9 @@ main {
     font-size: 14px;
 }
 
-.profile-details {
-    display: flex;
-    align-items: center;
-    margin: 18px 0 10px 0;
+.profile-details2 {
+    /* display: flex;
+    align-items: center; */
     padding: 10px;
 
 }
@@ -352,13 +351,9 @@ main {
 }
 .logout{
 
-    /* background-color: #FF2548;
-    padding: 2px 5px;
-    border-radius: 5px;
-    color: white;
-    border: none;
-    position: absolute;
-    right: 25px; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     cursor: pointer;
 }
 /* .upload{
@@ -384,7 +379,7 @@ main {
     display: flex;
     justify-content: center;
      align-items: center;
-
+    z-index: 10;
 }
 .upload-content, .upload-content2{ 
     display: flex;
@@ -457,11 +452,11 @@ main {
     display: none;
     width: 100vw;
     height: 50px;
-    position: fixed;
-    bottom: 0px;
     background-color: black;  
 }
-
+.logo2{
+    width: 70px;
+}
 .navbar-inner-mobile{
     display: flex;
     flex-direction: row;
@@ -470,6 +465,8 @@ main {
     
 }
 .navbar-mobile {
+    display: none;
+    width: 100vw;
     height: 54px;
     border-bottom: 1px solid var(--color-border);
    
@@ -479,6 +476,8 @@ main {
     
 }
 .mob-options2 {
+    display: flex;
+    align-items: center;
     border-radius: 5px;
     width: 200px;
     height: 40px;
@@ -507,11 +506,29 @@ main {
     margin-bottom: -30px;
     display: flex;
     flex-direction: column;
-    
+}
 
+.profile-pic2{
+    border-radius: 50%;
+    width: 100px;
+}
+.profile-pic{
+    border-radius: 50%;
+   
+}
+.my-profile-pic{
+    border-radius: 50%;
+    width: 150px;
+    margin-left: 50px;
+}
+.my-profile-details{
+    display: flex;
+    align-items: center;
 }
 .more{
-    display: flex;
+  
+display: flex;
+align-items: center;
  position: fixed;
   bottom: 15px;
   left: 0px;
@@ -525,6 +542,31 @@ main {
 .more:hover{
   background-color: var(--color-border);
 }
+.first-line{
+    display: flex;
+    align-items: center;
+}
+.second-line{
+    display: flex;
+    align-items: center;
+}
+.third-line{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.first-line a{
+    height: 27px;
+  
+    padding: 0;
+}
+.profile-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1px solid grey;
+}
 .mob-options2 {
     display: flex;
     flex-direction: row;
@@ -537,6 +579,10 @@ main {
 .option-title{
     font-weight: 500;
 }
+.navbar-mobile2 {
+    display: none;
+    
+} 
    @media (max-width: 1024px) {  
     .sidebar {
         display: none;
@@ -545,6 +591,10 @@ main {
         display: flex;
         flex-direction: row;
         justify-content: space-between; 
+        position: fixed;
+        bottom: 0px;
+        /* position: fixed;
+        bottom: 0; */
       }
    
     .content-container {
@@ -555,14 +605,27 @@ main {
     .content{
         margin: auto;
     }
+    .navbar-mobile2 {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        z-index: 2;
+    } 
+   
     .navbar-inner {
         width: 100%;
     }
-    .navbar-mobile {
-        display: flex;
-    } 
+    logout{
+        display: none;
+    }
+    .more{
+        display: none;
+        z-index: -4;
+        margin: 100px;
+    }
     .upload{
-
         /* background-color: #FF2548; */
         padding: 0;
         border-radius: none;
@@ -574,10 +637,44 @@ main {
     .side-nav{
         display: none;
     }
+    .logout{
+        display: none;
+    }
+    .mob-nav-content{
+        display: flex;
+        justify-content: space-between;
+    }
+
 } 
 
 @media (min-width: 769px) and (max-width: 1024px){
     .option-title{
         display: none;
     }
+    .more{
+        display: none;
+        position: fixed;
+        bottom: 0;
+        z-index: 13;
+    }
+    .side-nav{
+        display: flex;
+        flex-direction: column;
+        border: none;
+    }
+    .navbar-mobile2 {
+        display: none;
+        
+    } 
+    .mobile-devices {
+        display: none; 
+    }
+    .logout{
+        display: flex;
+        z-index: 6;
+    }
+   .mob-options2{
+    width: 50px;
+   }
+   
 }

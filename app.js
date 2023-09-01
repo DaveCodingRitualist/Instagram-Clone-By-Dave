@@ -21,9 +21,16 @@ class App {
   this.myAuth = document.querySelector('#firebaseui-auth-container');
   this.app = document.querySelector('#app');
   this.name = document.querySelector('.name');
+  this.nameProfile = document.querySelector('.name-profile');
   this.username = document.querySelector('.username');
+  this.usernameProfile = document.querySelector('.username-profile');
+  this.name.style.fontWeight = "bold";
+  this.nameProfile.style.fontWeight = "bold";
   this.logout = document.querySelector('.logout');
   this.myPost = document.querySelector(".posts");
+  this.userPost = document.querySelector(".user-posts");
+  this.profileContainer = document.querySelector(".profile-container")
+ this.profileToggler = document.querySelector(".profile-toggler");
   this.closeOptions = document.querySelector(".close-options");
   this.optionContainer = document.querySelector(".option-container");
   this.options = document.querySelector(".my-options");
@@ -37,7 +44,8 @@ class App {
     this.uploadContainer2 = document.querySelector('.upload-container2');
     this.uploadContent2 = document.querySelector('.upload-content2');
     this.editButton = document.querySelector('.upload2');
-    console.log(this.uploadContainer );
+    this.pageContent = document.querySelector(".page-content");
+   
     this.contentContainer2 = document.querySelector('.content-container2');
     this.closeContainer2 = document.querySelector('.close-button2');
     this.myAuth = document.querySelector('#firebaseui-auth-container');
@@ -53,14 +61,15 @@ class App {
     if(!e.target.classList.contains('upload-content') && !e.target.classList.contains('myForm') && !e.target.classList.contains('form-control') && !e.target.classList.contains('uploading') && !e.target.classList.contains('btn')){
           this.uploadContainer.classList.add('d-none');
           this.mainContainer.style.display = "block";
-          // Refresh the page after a specific amount of time (e.g., 5000 milliseconds or 5 seconds)
- 
-        
-
+          this.logout.style.display = "flex";
+       
     } 
    });
 
-   
+   this.profileToggler.addEventListener('click', () => {
+    this.pageContent.style.display = "none";
+ 
+   });
    
    this.uploadContainer2.addEventListener('click', e => {
     if(!e.target.classList.contains('upload-content2') && !e.target.classList.contains('myForm2') && !e.target.classList.contains('form-control') && !e.target.classList.contains('uploading') && !e.target.classList.contains('btn')){
@@ -72,11 +81,11 @@ class App {
     
     this.uploadButton.addEventListener('click', e => {
       this.uploadContainer.classList.remove('d-none');
-      this.mainContainer.style.display = "none";
+      this.mainContainer.style.display = "block";
     });
     this.create.addEventListener('click', e => {
       this.uploadContainer.classList.remove('d-none');
-      this.mainContainer.style.display = "none";
+      this.mainContainer.style.display = "block";
       this.logout.style.display = "none";
     });
 
@@ -272,35 +281,6 @@ if (!photo || !caption) {
 
 
   fetchPostsFromDB() {
-    // var docRef = db.collection("users").doc(this.userId);
-    // docRef
-    //   .get()
-    //   .then((doc) => {
-    //     if (doc.exists) {
-    //       console.log("Document data:", doc.data().posts);
-    //       this.posts = doc.data().posts;
-    //       this.displayPosts();
-    //     } else {
-    //       // doc.data() will be undefined in this case
-    //       console.log("No such document!");
-    //       db.collection("users")
-    //         .doc(this.userId)
-    //         .set({
-    //           posts: [],
-    //         })
-    //         .then(() => {
-    //           console.log("User successfully created!");
-    //         })
-    //         .catch((error) => {
-    //           console.error("Error writing document: ", error);
-    //         });
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error getting document:", error);
-    //   });
-
-
     db.collection("users")
     .get()
     .then((querySnapshot) => {
@@ -323,7 +303,38 @@ if (!photo || !caption) {
     });
   }
 
+  // Fetch post for the user signed in
+  fetchMyPostsFromDB() {
+     var docRef = db.collection("users").doc(this.userId);
+    docRef
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          console.log("Document data:", doc.data().posts);
+          this.posts = doc.data().posts;
+          this.displayMyPosts();
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+          db.collection("users")
+            .doc(this.userId)
+            .set({
+              posts: [],
+            })
+            .then(() => {
+              console.log("User successfully created!");
+            })
+            .catch((error) => {
+              console.error("Error writing document: ", error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting document:", error);
+      });
+    }
     
+
     displayPosts() {
       const renderedPosts = this.posts.map((post) => {
         // Check if the post belongs to the currently logged-in user
@@ -477,6 +488,11 @@ if (!photo || !caption) {
     }).join(""); // Join the array of post strings into a single string
       this.myPost.innerHTML = renderedPosts;
       const postsWrapper = this.myPost;
+
+
+
+
+
    
       //  Select the options div for each post
      this.optionsDivs =  postsWrapper.querySelectorAll('.post .options');
@@ -604,9 +620,11 @@ if (!photo || !caption) {
     if (user) {
        this.userId = user.uid;
       this.name.innerHTML = user.displayName;
+      this.nameProfile.innerHTML = user.displayName;
       this.pseudo = user.displayName.replace(/\s+/g, '');
       this.userName =  this.pseudo;
        this.username.innerHTML = this.pseudo;
+       this.usernameProfile.innerHTML = this.pseudo;
       this.redirectToApp();
     } else {
       this.redirectToAuth();
