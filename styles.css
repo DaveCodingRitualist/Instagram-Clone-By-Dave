@@ -583,6 +583,20 @@ align-items: center;
     display: none;
     
 } 
+.profile-footer{
+    font-size: .7em;
+    font-weight: bold;
+}
+.footer-first-line{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.footer-second-line{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
    @media (max-width: 1024px) {  
     .sidebar {
         display: none;
@@ -644,7 +658,10 @@ align-items: center;
         display: flex;
         justify-content: space-between;
     }
-
+  .my-profile-pic{
+    margin-left: 5px;
+    width: 200px;
+  }
 } 
 
 @media (min-width: 769px) and (max-width: 1024px){
