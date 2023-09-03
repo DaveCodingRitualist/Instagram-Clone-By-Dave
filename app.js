@@ -56,6 +56,7 @@ class App {
      this.homePage = document.querySelector('.home-page');
      this.homePage2 = document.querySelector('.home-page2');
      this.moreButton = document.querySelector('.more');
+     this.mobileNavbar = document.querySelector('.mobile-devices');
     this.closeContainer.addEventListener('click', () => {
       this.uploadContainer.classList.add('d-none');
     });
@@ -822,6 +823,7 @@ redirectToApp() {
   this.logout.style.display = "flex";
   this.pageContent.style.display = "block";
   this.profilePage.style.display = "none";
+  this.mobileNavbar.style.display = "flex";
   // this.sideContent.style.display = "block";
   this.moreButton.style.display = "flex";
   this.fetchPostsFromDB();
@@ -833,7 +835,8 @@ redirectToAuth() {
   this.myAuth.style.display = "block";
   this.app.style.display = "none";
   this.moreButton.style.display = "none";
-
+  this.mobileNavbar.style.display = "none";
+  console.log(this.mobileNavbar);
   this.ui.start('#firebaseui-auth-container', {
     callbacks: {
       signInSuccessWithAuthResult: (authResult, redirectUrl) => {
