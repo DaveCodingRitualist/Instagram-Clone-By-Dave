@@ -520,7 +520,6 @@ main {
     align-items: center;
 }
 .more{
-  
 display: flex;
 align-items: center;
  position: fixed;
@@ -594,7 +593,6 @@ align-items: center;
 .mobile-devices{
     display: none; 
     height: 0px;
-  
 }
    @media (max-width: 1024px) {  
     .sidebar {

@@ -15,7 +15,6 @@ class App {
  this.postId = "";
  this.userName = "",
  this.create = document.querySelector(".create");
- console.log(this.create);
  this.currentUserArrayLength = "",
  this.ui = new firebaseui.auth.AuthUI(auth);
   this.myAuth = document.querySelector('#firebaseui-auth-container');
@@ -60,9 +59,11 @@ class App {
     this.closeContainer.addEventListener('click', () => {
       this.uploadContainer.classList.add('d-none');
     });
+
     this.closeContainer2.addEventListener('click', () => {
       this.uploadContainer2.classList.add('d-none');
     });
+
    this.uploadContainer.addEventListener('click', e => {
     if(!e.target.classList.contains('upload-content') && !e.target.classList.contains('myForm') && !e.target.classList.contains('form-control') && !e.target.classList.contains('uploading') && !e.target.classList.contains('btn')){
           this.uploadContainer.classList.add('d-none');
@@ -115,7 +116,7 @@ class App {
     // Edit click event
     this.edit.addEventListener('click', e => {
       this.uploadContainer2.classList.remove('d-none');
-      this.mainContainer.style.display = "none";
+      this.mainContainer.style.display = "block";
       this.optionContainer.style.display = "none";
       const postElement = e.target.closest('.post');
       console.log(postElement);
@@ -179,10 +180,10 @@ this.myForm2 = document.querySelector('.myForm2');
 this.myForm2.addEventListener('submit', (e) => {
   e.preventDefault();
   const postId = localStorage.getItem('postId'); // Get the postId from local storage
-  const updatedCaption = this.myForm2.caption.value; // Get updated caption from your form
-  const updatedPhoto = this.myForm2.photo.files[0]; // Get updated photo from your form
+  const updatedCaption = this.myForm2.caption.value; // Get updated caption from the form
+  const updatedPhoto = this.myForm2.photo.files[0]; // Get updated photo from the form
 
-  // Find the post in your posts array by matching the postId
+  // Find the post in  posts array by matching the postId
   const postToUpdate = this.posts.find(post => post.id === postId);
 
   if (postToUpdate) {
@@ -705,7 +706,7 @@ if (!photo || !caption) {
            } else{
             this.posts.map((post) => {
               const matchingPost = this.posts.find(post => post.id === postId);
-                   // Now you can use currentUserArrayLength here
+            
                   if(matchingPost){
                     this.edit.classList.remove("d-none");
                     this.delete.classList.remove("d-none");
@@ -750,7 +751,7 @@ if (!photo || !caption) {
            .then((doc) => {
              if (doc.exists) {
               
-   // Find the post in your posts array by matching the postId
+   // Find the post in user posts array by matching the postId
    const postToDeleteIndex = this.posts.findIndex(post => post.id === postId);
 
    if (postToDeleteIndex !== -1) {
@@ -823,7 +824,6 @@ redirectToApp() {
   this.pageContent.style.display = "block";
   this.profilePage.style.display = "none";
   this.mobileNavbar.style.display = "flex";
-  // this.sideContent.style.display = "block";
   this.moreButton.style.display = "flex";
   this.fetchPostsFromDB();
   this.fetchMyPostsFromDB();
@@ -838,12 +838,8 @@ redirectToAuth() {
   this.ui.start('#firebaseui-auth-container', {
     callbacks: {
       signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-        // User successfully signed in.
-        // Return type determines whether we continue the redirect automatically
-        // or whether we leave that to developer to handle.
         this.userId = authResult.user.uid;
-        this.$authUserText.innerHTML = user.displayName;
-        
+        this.$authUserText.innerHTML = user.displayName; 
         this.redirectToApp();
       },
     },
