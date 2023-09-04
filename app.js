@@ -816,7 +816,6 @@ if (!photo || !caption) {
   });
 } 
 
-
 redirectToApp() {
   this.myAuth.style.display = "none";
   this.app.style.display = "block";
@@ -828,7 +827,6 @@ redirectToApp() {
   this.moreButton.style.display = "flex";
   this.fetchPostsFromDB();
   this.fetchMyPostsFromDB();
-
 }
 
 redirectToAuth() {
@@ -836,7 +834,7 @@ redirectToAuth() {
   this.app.style.display = "none";
   this.moreButton.style.display = "none";
   this.mobileNavbar.style.display = "none";
-  console.log(this.mobileNavbar);
+
   this.ui.start('#firebaseui-auth-container', {
     callbacks: {
       signInSuccessWithAuthResult: (authResult, redirectUrl) => {
